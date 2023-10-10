@@ -3,8 +3,6 @@ const ctx = canvas.getContext('2d')
 canvas.width = 800
 canvas.height = 800
 ctx.lineWidth = 2
-ctx.moveTo(200, 200)
-ctx.lineTo(400, 400)
 let isPainting = false
 
 function onMove(event) {
@@ -16,12 +14,14 @@ function onMove(event) {
   ctx.moveTo(event.offsetX, event.offsetY)
 }
 
-function onMouseDown() {
+function startPainting() {
   isPainting = true
 }
-function onMouseUp() {
+function cancelPainting() {
   isPainting = false
 }
 
 canvas.addEventListener('mousemove', onMove)
-canvas.addEventListener('mousedown', onMouseDown)
+canvas.addEventListener('mousedown', startPainting)
+canvas.addEventListener('mouseup', cancelPainting)
+canvas.addEventListener('mouseleave', cancelPainting)
