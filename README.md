@@ -1,1 +1,1 @@
-# JS_practice_1
+# Meme Maker to use Canvas
