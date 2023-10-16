@@ -1,3 +1,4 @@
+const undoBtn = document.getElementById('undo-btn')
 const saveBtn = document.getElementById('save')
 const textInput = document.getElementById('text')
 const fileInput = document.getElementById('file')
@@ -11,6 +12,7 @@ const color = document.getElementById('color')
 const lineWidth = document.getElementById('line-width')
 const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
+const history = []
 
 const CANVAS_WIDTH = 800
 const CANVAS_HEIGHT = 800
@@ -113,6 +115,24 @@ function onSaveClick() {
   a.click()
 }
 
+function saveState() {
+  history.push(canvas.toDataURL())
+}
+
+function undo() {
+  if (history.length > 1) {
+    history.pop() // Remove the current state
+    const lastState = history[history.length - 1]
+    const img = new Image()
+    img.src = lastState
+    img.onload = function() {
+      ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+      ctx.drawImage(img, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+    }
+  }
+}
+
+
 // All the user actions has to be an event
 canvas.addEventListener('dblclick', onDoubleClick)
 canvas.addEventListener('mousemove', onMove)
@@ -120,6 +140,9 @@ canvas.addEventListener('mousedown', startPainting)
 canvas.addEventListener('mouseup', cancelPainting)
 canvas.addEventListener('mouseleave', cancelPainting)
 canvas.addEventListener('click', onCanvasClick)
+canvas.addEventListener('mousedown', function() {
+  saveState()
+})
 
 lineWidth.addEventListener('change', onLineWidthChange)
 color.addEventListener('change', onColorChange)
@@ -131,3 +154,6 @@ deleteBtn.addEventListener('click', onDeleteClick)
 eraserBtn.addEventListener('click', onEraserClick)
 fileInput.addEventListener('change', onFileChange)
 saveBtn.addEventListener('click', onSaveClick)
+undoBtn.addEventListener('click', function() {
+  undo()
+})
