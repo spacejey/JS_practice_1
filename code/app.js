@@ -1,3 +1,4 @@
+const textInput = document.getElementById('text')
 const modeBtn = document.getElementById('mode-btn')
 const deleteBtn = document.getElementById('delete-btn')
 const eraserBtn = document.getElementById('eraser-btn')
@@ -12,9 +13,10 @@ const ctx = canvas.getContext('2d')
 const CANVAS_WIDTH = 800
 const CANVAS_HEIGHT = 800
 
-canvas.width = 800
-canvas.height = 800
+canvas.width = CANVAS_WIDTH
+canvas.height = CANVAS_HEIGHT
 ctx.lineWidth = lineWidth.value
+ctx.lineCap = 'round'
 let isPainting = false
 let isFilling = false
 
@@ -70,7 +72,6 @@ function onEraserClick() {
   modeBtn.innerText = 'Fill'
 }
 
-<<<<<<< HEAD
 function onMove(event) {
   if (isPainting) {
     if (isFilling) {
@@ -87,11 +88,6 @@ function onMove(event) {
   ctx.moveTo(event.offsetX, event.offsetY)
 }
 
-function onCanvasClick() {
-  if (isFilling) {
-    ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
-  }
-}
 
 function onSaveClick() {
   const url = canvas.toDataURL()
@@ -101,15 +97,6 @@ function onSaveClick() {
   a.click()
 }
 
-function onModeClick() {
-  if (isFilling) {
-    isFilling = false
-    modeBtn.innerText = 'Fill'
-  } else {
-    isFilling = true
-    modeBtn.innerText = 'Draw'
-  }
-}
 
 function onDoubleClick(event) {
   const text = textInput.value
@@ -121,17 +108,8 @@ function onDoubleClick(event) {
   }
 }
 
-function onSaveClick() {
-  const url = canvas.toDataURL()
-  const a = document.createElement('a')
-  a.href = url
-  a.download = 'myDrawing.jpg'
-  a.click()
-}
-=======
->>>>>>> 313c5144ba5715417a84ab7f807d6eaeb0fbda74
-
 // All the user actions has to be an event
+canvas.addEventListener('dbclick', onDoubleClick)
 canvas.addEventListener('mousemove', onMove)
 canvas.addEventListener('mousedown', startPainting)
 canvas.addEventListener('mouseup', cancelPainting)
