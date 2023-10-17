@@ -80,6 +80,46 @@ function onEraserClick() {
   modeBtn.innerText = 'Fill'
 }
 
+function onMove(event) {
+  if (isPainting) {
+    if (isFilling) {
+      ctx.lineTo(event.offsetX, event.offsetY)
+      ctx.stroke()
+    } else {
+      ctx.lineTo(event.offsetX, event.offsetY)
+      ctx.stroke()
+    }
+    return
+  }
+  // To make all lines separated depending on width and colors
+  ctx.beginPath()
+  ctx.moveTo(event.offsetX, event.offsetY)
+}
+
+function onCanvasClick() {
+  if (isFilling) {
+    ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+  }
+}
+
+function onSaveClick() {
+  const url = canvas.toDataURL()
+  const a = document.createElement('a')
+  a.href = url
+  a.download = 'myDrawing.jpg'
+  a.click()
+}
+
+function onModeClick() {
+  if (isFilling) {
+    isFilling = false
+    modeBtn.innerText = 'Fill'
+  } else {
+    isFilling = true
+    modeBtn.innerText = 'Draw'
+  }
+}
+
 // All the user actions has to be an event
 canvas.addEventListener('mousemove', onMove)
 canvas.addEventListener('mousedown', startPainting)
