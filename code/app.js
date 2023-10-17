@@ -109,7 +109,7 @@ function onDoubleClick(event) {
 }
 
 // All the user actions has to be an event
-canvas.addEventListener('dbclick', onDoubleClick)
+canvas.addEventListener('dblclick', onDoubleClick)
 canvas.addEventListener('mousemove', onMove)
 canvas.addEventListener('mousedown', startPainting)
 canvas.addEventListener('mouseup', cancelPainting)
