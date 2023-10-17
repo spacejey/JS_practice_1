@@ -80,6 +80,7 @@ function onEraserClick() {
   modeBtn.innerText = 'Fill'
 }
 
+
 // All the user actions has to be an event
 canvas.addEventListener('mousemove', onMove)
 canvas.addEventListener('mousedown', startPainting)
