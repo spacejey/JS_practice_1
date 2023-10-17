@@ -70,6 +70,7 @@ function onEraserClick() {
   modeBtn.innerText = 'Fill'
 }
 
+<<<<<<< HEAD
 function onMove(event) {
   if (isPainting) {
     if (isFilling) {
@@ -127,6 +128,8 @@ function onSaveClick() {
   a.download = 'myDrawing.jpg'
   a.click()
 }
+=======
+>>>>>>> 313c5144ba5715417a84ab7f807d6eaeb0fbda74
 
 // All the user actions has to be an event
 canvas.addEventListener('mousemove', onMove)
