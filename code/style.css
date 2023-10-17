@@ -30,10 +30,15 @@ body {
   gap: 20px;
 }
 
-#mode-btn, #delete-btn, #eraser-btn {
+#mode-btn, #delete-btn, #eraser-btn, #save {
   font-size: large;
   width: 150px;
   height: 40px;
+}
+
+#save {
+  background-color: black;
+  color: white;
 }
 
 .btns-image-text {

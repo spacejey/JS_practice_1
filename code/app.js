@@ -1,7 +1,3 @@
-const undoBtn = document.getElementById('undo-btn')
-const saveBtn = document.getElementById('save')
-const textInput = document.getElementById('text')
-const fileInput = document.getElementById('file')
 const modeBtn = document.getElementById('mode-btn')
 const deleteBtn = document.getElementById('delete-btn')
 const eraserBtn = document.getElementById('eraser-btn')
@@ -12,28 +8,16 @@ const color = document.getElementById('color')
 const lineWidth = document.getElementById('line-width')
 const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
-const history = []
 
 const CANVAS_WIDTH = 800
 const CANVAS_HEIGHT = 800
 
-canvas.width = CANVAS_WIDTH
-canvas.height = CANVAS_HEIGHT
+canvas.width = 800
+canvas.height = 800
 ctx.lineWidth = lineWidth.value
-ctx.lineCap = 'round'
 let isPainting = false
 let isFilling = false
 
-function onMove(event) {
-  if (isPainting) {
-    ctx.lineTo(event.offsetX, event.offsetY)
-    ctx.stroke()
-    return
-  }
-  // To make all lines seperated depends on width and colours
-  ctx.beginPath()
-  ctx.moveTo(event.offsetX, event.offsetY)
-}
 
 function startPainting() {
   isPainting = true
@@ -86,14 +70,43 @@ function onEraserClick() {
   modeBtn.innerText = 'Fill'
 }
 
-function onFileChange(event) {
-  const file = event.target.files[0]
-  const url = URL.createObjectURL(file)
-  const image = new Image()
-  image.src = url
-  image.onload = function() {
-    ctx.drawImage(image, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
-    fileInput.value = null
+function onMove(event) {
+  if (isPainting) {
+    if (isFilling) {
+      ctx.lineTo(event.offsetX, event.offsetY)
+      ctx.stroke()
+    } else {
+      ctx.lineTo(event.offsetX, event.offsetY)
+      ctx.stroke()
+    }
+    return
+  }
+  // To make all lines separated depending on width and colors
+  ctx.beginPath()
+  ctx.moveTo(event.offsetX, event.offsetY)
+}
+
+function onCanvasClick() {
+  if (isFilling) {
+    ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+  }
+}
+
+function onSaveClick() {
+  const url = canvas.toDataURL()
+  const a = document.createElement('a')
+  a.href = url
+  a.download = 'myDrawing.jpg'
+  a.click()
+}
+
+function onModeClick() {
+  if (isFilling) {
+    isFilling = false
+    modeBtn.innerText = 'Fill'
+  } else {
+    isFilling = true
+    modeBtn.innerText = 'Draw'
   }
 }
 
@@ -115,34 +128,12 @@ function onSaveClick() {
   a.click()
 }
 
-function saveState() {
-  history.push(canvas.toDataURL())
-}
-
-function undo() {
-  if (history.length > 1) {
-    history.pop() // Remove the current state
-    const lastState = history[history.length - 1]
-    const img = new Image()
-    img.src = lastState
-    img.onload = function() {
-      ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
-      ctx.drawImage(img, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
-    }
-  }
-}
-
-
 // All the user actions has to be an event
-canvas.addEventListener('dblclick', onDoubleClick)
 canvas.addEventListener('mousemove', onMove)
 canvas.addEventListener('mousedown', startPainting)
 canvas.addEventListener('mouseup', cancelPainting)
 canvas.addEventListener('mouseleave', cancelPainting)
 canvas.addEventListener('click', onCanvasClick)
-canvas.addEventListener('mousedown', function() {
-  saveState()
-})
 
 lineWidth.addEventListener('change', onLineWidthChange)
 color.addEventListener('change', onColorChange)
@@ -152,8 +143,3 @@ colorOptions.forEach(color => color.addEventListener('click', onColorClick))
 modeBtn.addEventListener('click', onModeClick)
 deleteBtn.addEventListener('click', onDeleteClick)
 eraserBtn.addEventListener('click', onEraserClick)
-fileInput.addEventListener('change', onFileChange)
-saveBtn.addEventListener('click', onSaveClick)
-undoBtn.addEventListener('click', function() {
-  undo()
-})
